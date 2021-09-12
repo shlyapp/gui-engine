@@ -24,7 +24,7 @@ namespace gui
 
 	class Component : public sf::Drawable
 	{
-	public:
+	protected:
 
 		std::list<IEventListener*> listeners_;
 
@@ -34,7 +34,7 @@ namespace gui
 
 		sf::Vector2f position_;
 		sf::Vector2f size_;
-
+	
 		Component(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
 			position_(position),
 			size_(size),
@@ -100,6 +100,8 @@ namespace gui
 			}
 		}
 
+	public:
+
 		void addListener(IEventListener* listener)
 		{
 			listeners_.push_back(listener);
@@ -109,6 +111,49 @@ namespace gui
 		{
 			listeners_.remove(listener);
 		}
+	};
+
+	class Button : public Component
+	{
+	private:
+
+		sf::Vector2<sf::Color> colors_;
+		mutable sf::RectangleShape rect_;
+
+		void enter() const override
+		{
+			Component::enter();
+			rect_.setFillColor(colors_.y);
+		}
+
+		void leave() const override
+		{
+			Component::leave();
+			rect_.setFillColor(colors_.x);
+		}
+
+	public:
+
+		Button(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
+			Component(position, size, window),
+			colors_({ sf::Color::Green, sf::Color::Red })
+		{
+			rect_.setPosition(position_);
+			rect_.setSize(size_);
+			rect_.setFillColor(colors_.x);
+		}
+
+		void setColors(sf::Color disactive, sf::Color active)
+		{
+			colors_ = { disactive, active };
+		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+		{
+			Component::draw(target, animation_state);
+			target.draw(rect_);
+		}
+
 	};
 
 }
