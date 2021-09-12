@@ -120,6 +120,9 @@ namespace gui
 		sf::Vector2<sf::Color> colors_;
 		mutable sf::RectangleShape rect_;
 
+		sf::Text text_;
+		sf::Font font_;
+
 		void enter() const override
 		{
 			Component::enter();
@@ -132,15 +135,32 @@ namespace gui
 			rect_.setFillColor(colors_.x);
 		}
 
+		void InitRect()
+		{
+			rect_.setPosition(position_);
+			rect_.setSize(size_);
+			rect_.setFillColor(colors_.x);
+		}
+
+		void InitText()
+		{
+			font_.loadFromFile("res/font.ttf");
+
+			text_.setFont(font_);
+			text_.setString("button");
+			text_.setCharacterSize(20.0f);
+			text_.setPosition(0, 0);
+			text_.setFillColor(sf::Color::Black);
+		}
+
 	public:
 
 		Button(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
 			Component(position, size, window),
 			colors_({ sf::Color::Green, sf::Color::Red })
 		{
-			rect_.setPosition(position_);
-			rect_.setSize(size_);
-			rect_.setFillColor(colors_.x);
+			InitRect();
+			InitText();
 		}
 
 		void setColors(sf::Color disactive, sf::Color active)
@@ -152,6 +172,7 @@ namespace gui
 		{
 			Component::draw(target, animation_state);
 			target.draw(rect_);
+			target.draw(text_);
 		}
 
 	};
