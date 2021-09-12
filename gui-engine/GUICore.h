@@ -111,6 +111,27 @@ namespace gui
 		{
 			listeners_.remove(listener);
 		}
+
+		sf::Vector2f getPosition() const
+		{
+			return position_;
+		}
+
+		sf::Vector2f getSize() const
+		{
+			return size_;
+		}
+
+		virtual void setPosition(const sf::Vector2f position)
+		{
+			position_ = position;
+		}
+
+		void setSize( const sf::Vector2f size)
+		{
+			size_ = size;
+		}
+
 	};
 
 	class Button : public Component
@@ -153,7 +174,6 @@ namespace gui
 
 			text_.setPosition(position_.x + size_.x/2, position_.y + size_.y/2);
 			text_.setFillColor(sf::Color::White);
-
 		}
 
 	public:
@@ -166,16 +186,29 @@ namespace gui
 			InitText();
 		}
 
-		void setColors(sf::Color disactive, sf::Color active)
-		{
-			colors_ = { disactive, active };
-		}
-
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
 			Component::draw(target, animation_state);
 			target.draw(rect_);
 			target.draw(text_);
+		}
+
+		void setPosition(sf::Vector2f position) override
+		{
+			Component::setPosition(position);
+			text_.setPosition(position_.x + size_.x / 2, position_.y + size_.y / 2);
+		}
+
+		void setText(const std::string text)
+		{
+			text_.setString(text);
+			text_.setOrigin(text_.getLocalBounds().width / 2, text_.getLocalBounds().height / 2);
+			text_.setPosition(position_.x + size_.x / 2, position_.y + size_.y / 2);
+		}
+
+		void setColors(sf::Color disactive, sf::Color active)
+		{
+			colors_ = { disactive, active };
 		}
 
 	};
