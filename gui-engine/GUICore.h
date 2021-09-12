@@ -148,9 +148,12 @@ namespace gui
 
 			text_.setFont(font_);
 			text_.setString("button");
+			text_.setOrigin(text_.getLocalBounds().width / 2, text_.getLocalBounds().height / 2);
+
 			text_.setCharacterSize(20.0f);
-			text_.setPosition(0, 0);
+			text_.setPosition(size_.x/2, size_.y/2);
 			text_.setFillColor(sf::Color::Black);
+
 		}
 
 	public:
