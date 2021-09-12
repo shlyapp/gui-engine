@@ -5,7 +5,7 @@ class Test : public gui::IEventListener
 {
 public:
 
-    void updateByGUIEvent(gui::EventType type, const gui::Component* component) override
+    void handleGUIEvent(gui::EventType type, const gui::Component* component) override
     {
         switch (type)
         {
@@ -24,12 +24,12 @@ public:
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
 
     Test test;
 
-    gui::Component component(sf::Vector2f(0, 0), sf::Vector2f(100, 100), &window);
-    component.addListener(&test);
+    gui::Button btn(sf::Vector2f (100, 200 ), sf::Vector2f( 500, 350 ), &window);
+    btn.addListener(&test);
 
     while (window.isOpen())
     {
@@ -41,7 +41,7 @@ int main()
         }
 
         window.clear();
-        window.draw(component);
+        window.draw(btn);
         window.display();
     }
 
