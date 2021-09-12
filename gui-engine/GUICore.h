@@ -18,7 +18,7 @@ namespace gui
 	{
 	public:
 
-		virtual void updateByGUIEvent(EventType type, const Component* component) = 0;
+		virtual void handleGUIEvent(EventType type, const Component* component) = 0;
 
 	};
 
@@ -48,7 +48,7 @@ namespace gui
 		{
 			for (auto listener : listeners_)
 			{
-				listener->updateByGUIEvent(event_, this);
+				listener->handleGUIEvent(event_, this);
 			}
 		}
 
