@@ -307,11 +307,13 @@ namespace gui
 		void setColor(sf::Color disactive, sf::Color active)
 		{
 			colors_ = { disactive, active };
+			text_.setFillColor(colors_.x);
 		}
 
 		void setColor(sf::Color color)
 		{
 			colors_.x = color;
+			text_.setFillColor(colors_.x);
 		}
 
 	};
