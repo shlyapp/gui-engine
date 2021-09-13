@@ -99,6 +99,8 @@ namespace gui
 		{
 			sf::Vector2f mouse_pos = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
 
+			std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
+
 			if (sf::IntRect(position_.x, position_.y, size_.x, size_.y).contains(mouse_pos.x, mouse_pos.y))
 			{
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -239,8 +241,10 @@ namespace gui
 	{
 	private:
 
-		sf::Text text_;
+		mutable sf::Text text_;
 		sf::Font font_;
+
+		sf::Vector2 <sf::Color> colors_;
 
 		void InitText(const std::string text)
 		{
@@ -251,14 +255,38 @@ namespace gui
 			text_.setCharacterSize(50.0f);
 
 			text_.setPosition(position_.x, position_.y);
-			size_ = { text_.getLocalBounds().width, text_.getLocalBounds().height };
+			size_ = {(2 + text_.getLocalBounds().width), 12 + text_.getLocalBounds().height};
 			text_.setFillColor(sf::Color::White);
+		}
+
+		void enter() const override
+		{
+			Component::enter();
+
+			if (interactivity)
+			{
+				text_.setFillColor(colors_.y);
+			}		
+		}
+
+		void leave() const override
+		{
+			Component::leave();
+
+			if (interactivity)
+			{
+				text_.setFillColor(colors_.x);
+			}		
 		}
 
 	public:
 
+		bool interactivity;
+
 		TextBlock(sf::Vector2f position, std::string text, sf::RenderWindow* window) :
-			Component(window)
+			Component(window),
+			colors_({ sf::Color::White, sf::Color::Black }),
+			interactivity(false)
 		{
 			Component::setPosition(position);
 			InitText(text);
@@ -273,7 +301,7 @@ namespace gui
 		void setText(const std::string text)
 		{
 			text_.setString(text);
-			size_ = { text_.getLocalBounds().width, text_.getLocalBounds().height };
+			size_ = { 2 + text_.getLocalBounds().width, 12 + text_.getLocalBounds().height};
 		}
 
 	};
