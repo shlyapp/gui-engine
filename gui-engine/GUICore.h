@@ -31,6 +31,11 @@ namespace gui
 
 	class Component : public sf::Drawable
 	{
+	public:
+
+		bool visibility;
+		bool activity;
+
 	protected:
 
 		std::list<IEventListener*> listeners_;
@@ -46,6 +51,8 @@ namespace gui
 			position_(position),
 			size_(size),
 			window_(window),
+			visibility(true),
+			activity(true),
 			event_(EventType::MouseLeave)
 		{
 
@@ -55,6 +62,8 @@ namespace gui
 			position_({ 0, 0 }),
 			size_({ 0, 0 }),
 			window_(window),
+			visibility(true),
+			activity(true),
 			event_(EventType::MouseLeave)
 		{
 
@@ -97,25 +106,29 @@ namespace gui
 
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
-			sf::Vector2f mouse_pos = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
-
-			//std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
-
-			if (sf::IntRect(position_.x, position_.y, size_.x, size_.y).contains(mouse_pos.x, mouse_pos.y))
+			if (activity)
 			{
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				sf::Vector2f mouse_pos = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
+
+				//std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
+
+				if (sf::IntRect(position_.x, position_.y, size_.x, size_.y).contains(mouse_pos.x, mouse_pos.y))
 				{
-					click();
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					{
+						click();
+					}
+					else
+					{
+						enter();
+					}
 				}
 				else
 				{
-					enter();
+					leave();
 				}
 			}
-			else
-			{
-				leave();
-			}
+	
 		}
 
 	public:
@@ -208,8 +221,11 @@ namespace gui
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
 			Component::draw(target, animation_state);
-			target.draw(rect_);
-			target.draw(text_);
+			if (visibility)
+			{
+				target.draw(rect_);
+				target.draw(text_);
+			}
 		}
 
 		void setPosition(sf::Vector2f position) override
@@ -239,6 +255,10 @@ namespace gui
 
 	class TextBlock : public Component
 	{
+	public:
+
+		bool interactivity;
+
 	private:
 
 		mutable sf::Text text_;
@@ -281,8 +301,6 @@ namespace gui
 
 	public:
 
-		bool interactivity;
-
 		TextBlock(sf::Vector2f position, std::string text, sf::RenderWindow* window) :
 			Component(window),
 			colors_({ sf::Color::White, sf::Color::Black }),
@@ -295,7 +313,10 @@ namespace gui
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
 			Component::draw(target, animation_state);
-			target.draw(text_);
+			if (visibility)
+			{
+				target.draw(text_);
+			}	
 		}
 
 		void setText(const std::string text)
