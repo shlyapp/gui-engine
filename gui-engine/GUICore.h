@@ -99,7 +99,7 @@ namespace gui
 		{
 			sf::Vector2f mouse_pos = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
 
-			std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
+			//std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
 
 			if (sf::IntRect(position_.x, position_.y, size_.x, size_.y).contains(mouse_pos.x, mouse_pos.y))
 			{
@@ -230,7 +230,7 @@ namespace gui
 			updatePosition();
 		}
 
-		void setColors(sf::Color disactive, sf::Color active)
+		void setColor(sf::Color disactive, sf::Color active)
 		{
 			colors_ = { disactive, active };
 		}
@@ -256,7 +256,7 @@ namespace gui
 
 			text_.setPosition(position_.x, position_.y);
 			size_ = {(2 + text_.getLocalBounds().width), 12 + text_.getLocalBounds().height};
-			text_.setFillColor(sf::Color::White);
+			text_.setFillColor(colors_.x);
 		}
 
 		void enter() const override
@@ -302,6 +302,16 @@ namespace gui
 		{
 			text_.setString(text);
 			size_ = { 2 + text_.getLocalBounds().width, 12 + text_.getLocalBounds().height};
+		}
+
+		void setColor(sf::Color disactive, sf::Color active)
+		{
+			colors_ = { disactive, active };
+		}
+
+		void setColor(sf::Color color)
+		{
+			colors_.x = color;
 		}
 
 	};
