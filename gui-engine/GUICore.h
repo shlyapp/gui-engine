@@ -16,6 +16,13 @@ namespace gui
 
 	class IEventListener
 	{
+	protected:
+
+		IEventListener()
+		{
+
+		}
+
 	public:
 
 		virtual void handleGUIEvent(EventType type, const Component* component) = 0;
@@ -38,6 +45,15 @@ namespace gui
 		Component(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
 			position_(position),
 			size_(size),
+			window_(window),
+			event_(EventType::MouseLeave)
+		{
+
+		}
+
+		Component(sf::RenderWindow* window) :
+			position_({ 0, 0 }),
+			size_({ 0, 0 }),
 			window_(window),
 			event_(EventType::MouseLeave)
 		{
@@ -125,11 +141,6 @@ namespace gui
 		virtual void setPosition(const sf::Vector2f position)
 		{
 			position_ = position;
-		}
-
-		void setSize( const sf::Vector2f size)
-		{
-			size_ = size;
 		}
 
 	};
@@ -224,5 +235,47 @@ namespace gui
 
 	};
 
-}
+	class TextBlock : public Component
+	{
+	private:
 
+		sf::Text text_;
+		sf::Font font_;
+
+		void InitText(const std::string text)
+		{
+			font_.loadFromFile("res/font.ttf");
+
+			text_.setFont(font_);
+			text_.setString(text);
+			text_.setCharacterSize(50.0f);
+
+			text_.setPosition(position_.x, position_.y);
+			size_ = { text_.getLocalBounds().width, text_.getLocalBounds().height };
+			text_.setFillColor(sf::Color::White);
+		}
+
+	public:
+
+		TextBlock(sf::Vector2f position, std::string text, sf::RenderWindow* window) :
+			Component(window)
+		{
+			Component::setPosition(position);
+			InitText(text);
+		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+		{
+			Component::draw(target, animation_state);
+			target.draw(text_);
+		}
+
+		void setText(const std::string text)
+		{
+			text_.setString(text);
+			size_ = { text_.getLocalBounds().width, text_.getLocalBounds().height };
+		}
+
+	};
+
+}
