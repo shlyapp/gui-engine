@@ -176,6 +176,12 @@ namespace gui
 			text_.setFillColor(sf::Color::White);
 		}
 
+		void updatePosition()
+		{
+			text_.setOrigin(text_.getLocalBounds().width / 2, text_.getLocalBounds().height / 2);
+			text_.setPosition(position_.x + size_.x / 2, position_.y + size_.y / 2);
+		}
+
 	public:
 
 		Button(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
@@ -202,8 +208,13 @@ namespace gui
 		void setText(const std::string text)
 		{
 			text_.setString(text);
-			text_.setOrigin(text_.getLocalBounds().width / 2, text_.getLocalBounds().height / 2);
-			text_.setPosition(position_.x + size_.x / 2, position_.y + size_.y / 2);
+			updatePosition();
+		}
+
+		void setFontSize(const int size)
+		{
+			text_.setCharacterSize(size);
+			updatePosition();
 		}
 
 		void setColors(sf::Color disactive, sf::Color active)
