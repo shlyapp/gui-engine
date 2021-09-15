@@ -59,8 +59,11 @@ int main()
 
     gui::TextBlock txt(sf::Vector2f(0, 0), "this is text!", &window);
     txt.addListener(&test2);
-
     txt.interactivity = true;
+
+    txt.setColor(sf::Color::Green, sf::Color::Red);
+
+    gui::ProgressBar bar(sf::Vector2f(400, 100), sf::Vector2f(200, 50), &window);
 
     while (window.isOpen())
     {
@@ -73,9 +76,16 @@ int main()
             }
         }
 
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            bar.setProgress(bar.getProgress() + 1);
+            std::cout << "Y\n";
+        }
+
         window.clear();
         window.draw(btn);
         window.draw(txt);
+        window.draw(bar);
         window.display();
     }
 
