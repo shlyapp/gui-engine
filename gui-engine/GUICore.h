@@ -339,4 +339,80 @@ namespace gui
 
 	};
 
+	class ProgressBar : public Component
+	{
+	private:
+
+		sf::RectangleShape border_;
+		sf::RectangleShape progress_bar_;
+
+		sf::Vector2<int> range_;
+		int progress_;
+		float step_;
+
+		void initRects()
+		{
+			border_.setPosition(position_);
+			border_.setSize(size_);
+			border_.setFillColor(sf::Color::Transparent);
+			border_.setOutlineThickness(-2);
+			
+			progress_bar_.setPosition(position_ + sf::Vector2f(2, 2));
+			progress_bar_.setSize(sf::Vector2f(0, size_.y - 4));
+			progress_bar_.setFillColor(sf::Color::Green);
+		}
+
+	public:
+
+		ProgressBar(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
+			Component(position, size, window),
+			range_({ 0, 100 }),
+			progress_(0),
+			step_((size.x - 4) / range_.y)
+		{
+			initRects();
+		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+		{
+			Component::draw(target, animation_state);
+			target.draw(border_);
+			target.draw(progress_bar_);
+		}
+
+		void setPosition(const sf::Vector2f position) override
+		{
+			Component::setPosition(position);
+
+			border_.setPosition(position_);
+			progress_bar_.setPosition(position_ + sf::Vector2f(2, 2));
+		}
+
+		void setColor(sf::Color color)
+		{
+			progress_bar_.setFillColor(color);
+		}
+
+		void setOutlineColor(sf::Color color)
+		{
+			border_.setFillColor(color);
+		}
+
+		void setProgress(const int value)
+		{
+			if (value > 100)
+			{
+				return;
+			}
+
+			progress_ = value;
+			progress_bar_.setSize(sf::Vector2f(step_*progress_, size_.y - 4));
+		}
+
+		int getProgress() const
+		{
+			return progress_;
+		}
+
+	};
 }
