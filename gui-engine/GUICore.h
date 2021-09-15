@@ -265,6 +265,8 @@ namespace gui
 		sf::Font font_;
 
 		sf::Vector2 <sf::Color> colors_;
+		
+		sf::Vector2f m_sfml_bounds = { 2, 12 };
 
 		void InitText(const std::string text)
 		{
@@ -275,7 +277,7 @@ namespace gui
 			text_.setCharacterSize(50.0f);
 
 			text_.setPosition(position_.x, position_.y);
-			size_ = {(2 + text_.getLocalBounds().width), 12 + text_.getLocalBounds().height};
+			size_ = { sf::Vector2f{text_.getLocalBounds().width, text_.getLocalBounds().height } + m_sfml_bounds };
 			text_.setFillColor(colors_.x);
 		}
 
@@ -322,7 +324,7 @@ namespace gui
 		void setText(const std::string text)
 		{
 			text_.setString(text);
-			size_ = { 2 + text_.getLocalBounds().width, 12 + text_.getLocalBounds().height};
+			size_ = { sf::Vector2f{text_.getLocalBounds().width, text_.getLocalBounds().height } + m_sfml_bounds };
 		}
 
 		void setColor(sf::Color disactive, sf::Color active)
