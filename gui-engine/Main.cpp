@@ -79,7 +79,6 @@ int main()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
             bar.setProgress(bar.getProgress() + 1);
-            std::cout << "Y\n";
         }
 
         window.clear();
