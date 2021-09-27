@@ -1,44 +1,49 @@
 ﻿#include <iostream>
 #include "GUICore.h"
 
-class Test : public gui::IEventListener
+class Test : public gui::IEventListener, public sf::Drawable
 {
+private:
+
+    gui::Button* btn_up_;
+    gui::Button* btn_down_;
+    gui::ProgressBar* bar_;
+
 public:
 
-    void handleGUIEvent(gui::EventType type, const gui::Component* component) override
+    Test(sf::RenderWindow* window) :
+        btn_up_(new gui::Button(sf::Vector2f(400, 100), sf::Vector2f(300, 150), window)),
+        btn_down_(new gui::Button(sf::Vector2f(700, 100), sf::Vector2f(300, 150), window)),
+        bar_(new gui::ProgressBar(sf::Vector2f(100, 100), sf::Vector2f(300, 150), window))
     {
-        switch (type)
-        {
-        case gui::EventType::Click:
-            std::cout << "click!\n";
-            break;
-        case gui::EventType::MouseEnter:
-            std::cout << "enter!\n";
-            break;
-        case gui::EventType::MouseLeave:
-            std::cout << "leave!\n";
-            break;
-        }
+        btn_up_->setText("Up bar");
+        btn_up_->setFontSize(50);
+        btn_up_->addListener(this);
+
+        btn_down_->setText("Down bar");
+        btn_down_->setFontSize(50);
+        btn_down_->addListener(this);
     }
-};
 
-class Test2 : public gui::IEventListener
-{
-public: 
+    void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+    {
+        target.draw(*btn_up_);
+        target.draw(*btn_down_);
+        target.draw(*bar_);
+    }
 
     void handleGUIEvent(gui::EventType type, const gui::Component* component) override
     {
-        switch (type)
+        if (type == gui::EventType::Click)
         {
-        case gui::EventType::Click:
-            std::cout << "text click!\n";
-            break;
-        case gui::EventType::MouseEnter:
-            std::cout << "text enter!\n";
-            break;
-        case gui::EventType::MouseLeave:
-            std::cout << "text leave!\n";
-            break;
+            if (component == btn_up_)
+            {
+                bar_->setProgress(bar_->getProgress() + 10);
+            }
+            else
+            {
+                bar_->setProgress(bar_->getProgress() - 10);
+            }
         }
     }
 };
@@ -48,22 +53,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
 
-    Test test;
-    Test2 test2;
-
-    gui::Button btn(sf::Vector2f (100, 200 ), sf::Vector2f( 500, 350 ), &window);
-    btn.addListener(&test);
-
-    btn.setText("Hello!");
-    btn.setFontSize(50);
-
-    gui::TextBlock txt(sf::Vector2f(0, 0), "this is text!", &window);
-    txt.addListener(&test2);
-    txt.interactivity = true;
-
-    txt.setColor(sf::Color::Green, sf::Color::Red);
-
-    gui::ProgressBar bar(sf::Vector2f(400, 100), sf::Vector2f(200, 50), &window);
+    Test test(&window);
 
     while (window.isOpen())
     {
@@ -75,16 +65,8 @@ int main()
                 window.close();
             }
         }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-            bar.setProgress(bar.getProgress() + 1);
-        }
-
         window.clear();
-        window.draw(btn);
-        window.draw(txt);
-        window.draw(bar);
+        window.draw(test);
         window.display();
     }
 
