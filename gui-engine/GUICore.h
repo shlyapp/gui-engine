@@ -195,7 +195,7 @@ namespace gui
 
 			text_.setFont(font_);
 			text_.setString("button");
-			text_.setCharacterSize(50.0f);
+			text_.setCharacterSize(20.0f);
 			text_.setOrigin(text_.getLocalBounds().width / 2, text_.getLocalBounds().height / 2);
 
 			text_.setPosition(position_.x + size_.x/2, position_.y + size_.y/2);
@@ -402,7 +402,7 @@ namespace gui
 
 		void setProgress(const int value)
 		{
-			if (value > 100)
+			if ((value > 100) or ((progress_ + value) < 0))
 			{
 				return;
 			}
