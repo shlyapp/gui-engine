@@ -104,7 +104,7 @@ namespace gui
 			}
 		}
 
-		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+		virtual void update() const
 		{
 			if (activity)
 			{
@@ -128,8 +128,9 @@ namespace gui
 					leave();
 				}
 			}
-	
 		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override = 0;
 
 	public:
 
@@ -220,7 +221,7 @@ namespace gui
 
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
-			Component::draw(target, animation_state);
+			Component::update();
 			if (visibility)
 			{
 				target.draw(rect_);
@@ -314,7 +315,7 @@ namespace gui
 
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
-			Component::draw(target, animation_state);
+			Component::update();
 			if (visibility)
 			{
 				target.draw(text_);
@@ -377,7 +378,7 @@ namespace gui
 
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
 		{
-			Component::draw(target, animation_state);
+			Component::update();
 			target.draw(border_);
 			target.draw(progress_bar_);
 		}
