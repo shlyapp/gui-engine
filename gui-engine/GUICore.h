@@ -110,22 +110,26 @@ namespace gui
 			{
 				sf::Vector2f mouse_pos = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
 
-				//std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
+				std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
 
 				if (sf::IntRect(position_.x, position_.y, size_.x, size_.y).contains(mouse_pos.x, mouse_pos.y))
 				{
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 					{
-						click();
+						if (event_ != EventType::Click)
+						{
+							click();
+						}
+						
 					}
 					else
 					{
-						enter();
+						//enter();
 					}
 				}
 				else
 				{
-					leave();
+					//leave();
 				}
 			}
 		}
@@ -318,6 +322,65 @@ namespace gui
 		{
 			Component::setPosition(position);
 			btn_sprite_.setPosition(position);
+		}
+
+	};
+
+	class StatusButton : public Button
+	{
+	private:
+
+		std::vector<sf::Texture*> textures_;
+		mutable sf::Sprite btn_sprite_;
+
+		mutable int iter_num_;
+
+		void click() const override
+		{
+			iter_num_++;
+			if (iter_num_ == textures_.size())
+			{
+				iter_num_ = 0;
+			}
+
+			btn_sprite_.setTexture(*textures_[iter_num_]);
+			std::cout << "update!\n";
+		}
+
+	public:
+
+		StatusButton(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
+			Button(position, size, window),
+			iter_num_(0)
+		{
+
+		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+		{
+			Component::update();
+			if (visibility)
+			{
+				target.draw(btn_sprite_);
+				//std::cout << iter_num_ << std::endl;
+				//std::cout << btn_sprite_.getTexture() << std::endl;
+			}
+		}
+
+		void setPosition(sf::Vector2f position) override
+		{
+			Component::setPosition(position);
+			btn_sprite_.setPosition(position);
+		}
+
+		void addTexture(sf::Texture* texture)
+		{
+			textures_.push_back(texture);
+			if (btn_sprite_.getTexture() == nullptr)
+			{
+				std::cout << "YES\n";
+				btn_sprite_.setTexture(*textures_[iter_num_]);
+			}
 		}
 
 	};
