@@ -9,6 +9,10 @@ private:
     gui::ColorButton* btn_down_;
     gui::TextureButton* btn_;
     gui::ProgressBar* bar_;
+    gui::StatusButton* status_;
+    
+    sf::Texture text_;
+    sf::Texture text_2;
 
 public:
 
@@ -16,7 +20,8 @@ public:
         btn_up_(new gui::ColorButton(sf::Vector2f(400, 100), sf::Vector2f(300, 150), window)),
         btn_down_(new gui::ColorButton(sf::Vector2f(700, 100), sf::Vector2f(300, 150), window)),
         bar_(new gui::ProgressBar(sf::Vector2f(100, 100), sf::Vector2f(300, 150), window)),
-        btn_(new gui::TextureButton(sf::Vector2f(0, 0), sf::Vector2f(249, 62), window))
+        btn_(new gui::TextureButton(sf::Vector2f(0, 0), sf::Vector2f(249, 62), window)),
+        status_(new gui::StatusButton(sf::Vector2f(0, 0), sf::Vector2f(249, 62), window))
     {
         btn_up_->setText("Up bar");
         btn_up_->setFontSize(50);
@@ -27,14 +32,21 @@ public:
         btn_down_->addListener(this);
 
         btn_->setPosition({ 500, 500 });
+
+        
+        text_.loadFromFile("res/btn_2.png");
+        status_->addTexture(&text_);
+        text_2.loadFromFile("res/btn_1.png");
+        status_->addTexture(&text_2);
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
     {
-        target.draw(*btn_up_);
-        target.draw(*btn_down_);
-        target.draw(*bar_);
-        target.draw(*btn_);
+        //target.draw(*btn_up_);
+        //target.draw(*btn_down_);
+        //target.draw(*bar_);
+        //target.draw(*btn_);
+        target.draw(*status_);
     }
 
     void handleGUIEvent(gui::EventType type, const gui::Component* component) override
