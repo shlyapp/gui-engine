@@ -20,7 +20,7 @@ namespace gui
 
 		IEventListener()
 		{
-
+			
 		}
 
 	public:
@@ -266,6 +266,58 @@ namespace gui
 		void setColor(sf::Color disactive, sf::Color active)
 		{
 			colors_ = { disactive, active };
+		}
+
+	};
+
+	class TextureButton : public Button
+	{
+	private:
+
+		sf::Vector2<sf::Texture*> textures_;
+		mutable sf::Sprite btn_sprite_;
+		
+		void enter() const override
+		{
+			Component::enter();
+			btn_sprite_.setTexture(*textures_.y);
+		}
+
+		void leave() const override
+		{
+			Component::leave();
+			btn_sprite_.setTexture(*textures_.x);
+		}
+
+		void InitTextures()
+		{
+			textures_.x->loadFromFile("res/btn_1.png");
+			textures_.y->loadFromFile("res/btn_2.png");
+			btn_sprite_.setTexture(*textures_.x);
+		}
+
+	public: 
+
+		TextureButton(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
+			Button(position, size, window),
+			textures_({ new sf::Texture(), new sf::Texture() })
+		{
+			InitTextures();
+		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
+		{
+			Component::update();
+			if (visibility)
+			{
+				target.draw(btn_sprite_);
+			}
+		}
+
+		void setPosition(sf::Vector2f position) override
+		{
+			Component::setPosition(position);
+			btn_sprite_.setPosition(position);
 		}
 
 	};
