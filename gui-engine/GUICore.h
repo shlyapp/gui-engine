@@ -83,6 +83,7 @@ namespace gui
 			{
 				event_ = EventType::Click;
 				notifyListeners();
+				std::cout << "click!\n";
 			}
 		}
 
@@ -92,6 +93,7 @@ namespace gui
 			{
 				event_ = EventType::MouseEnter;
 				notifyListeners();
+				std::cout << "enter!\n";
 			}
 		}
 
@@ -101,6 +103,7 @@ namespace gui
 			{
 				event_ = EventType::MouseLeave;
 				notifyListeners();
+				std::cout << "leave!\n";
 			}
 		}
 
@@ -110,7 +113,7 @@ namespace gui
 			{
 				sf::Vector2f mouse_pos = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
 
-				std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
+				//std::cout << size_.x << "\t" << size_.y << "\t" << mouse_pos.x << "\t" << mouse_pos.y << std::endl;
 
 				if (sf::IntRect(position_.x, position_.y, size_.x, size_.y).contains(mouse_pos.x, mouse_pos.y))
 				{
@@ -124,12 +127,12 @@ namespace gui
 					}
 					else
 					{
-						//enter();
+						enter();
 					}
 				}
 				else
 				{
-					//leave();
+					leave();
 				}
 			}
 		}
@@ -337,6 +340,8 @@ namespace gui
 
 		void click() const override
 		{
+			Component::click();
+
 			iter_num_++;
 			if (iter_num_ == textures_.size())
 			{
@@ -344,7 +349,6 @@ namespace gui
 			}
 
 			btn_sprite_.setTexture(*textures_[iter_num_]);
-			std::cout << "update!\n";
 		}
 
 	public:
