@@ -163,6 +163,22 @@ namespace gui
 
 	class Button : public Component
 	{
+	protected:
+
+		Button(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
+			Component(position, size, window)
+		{
+			
+		}
+
+	public:
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override = 0;
+
+	};
+
+	class ColorButton : public Button
+	{
 	private:
 
 		sf::Vector2<sf::Color> colors_;
@@ -199,7 +215,7 @@ namespace gui
 			text_.setCharacterSize(20.0f);
 			text_.setOrigin(text_.getLocalBounds().width / 2, text_.getLocalBounds().height / 2);
 
-			text_.setPosition(position_.x + size_.x/2, position_.y + size_.y/2);
+			text_.setPosition(position_.x + size_.x / 2, position_.y + size_.y / 2);
 			text_.setFillColor(sf::Color::White);
 		}
 
@@ -211,9 +227,9 @@ namespace gui
 
 	public:
 
-		Button(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window) :
-			Component(position, size, window),
-			colors_({ sf::Color::Green, sf::Color::Red })
+		ColorButton(sf::Vector2f position, sf::Vector2f size, sf::RenderWindow* window):
+			Button(position, size, window),
+			colors_({sf::Color::Green, sf::Color::Red})
 		{
 			InitRect();
 			InitText();
