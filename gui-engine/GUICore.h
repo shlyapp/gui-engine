@@ -14,6 +14,21 @@ namespace gui
 		MouseLeave
 	};
 
+	enum class HorizontalAligment
+	{
+		Center,
+		Left,
+		Right
+	};
+
+	enum class VerticalAligment
+	{
+		Bottom,
+		Center,
+		Left,
+		Right
+	};
+
 	class IEventListener
 	{
 	protected:
@@ -164,6 +179,32 @@ namespace gui
 		virtual void setPosition(const sf::Vector2f position)
 		{
 			position_ = position;
+		}
+
+		virtual void setPosition(VerticalAligment aligment)
+		{
+			sf::Vector2f position;
+			switch (aligment)
+			{
+			case gui::VerticalAligment::Bottom:
+				break;
+			case gui::VerticalAligment::Center:
+				position.x = position_.x;
+				position.y = window_->getSize().y / 2 - size_.y / 2;
+				setPosition(position);
+				break;
+			case gui::VerticalAligment::Left:
+				break;
+			case gui::VerticalAligment::Right:
+				break;
+			default:
+				break;
+			}
+		}
+
+		void setPosition(HorizontalAligment aligment)
+		{
+
 		}
 
 	};
@@ -329,7 +370,7 @@ namespace gui
 
 	};
 
-	class StatusButton : public Button
+	class StatusButton : virtual public Button
 	{
 	private:
 
@@ -385,6 +426,11 @@ namespace gui
 				std::cout << "YES\n";
 				btn_sprite_.setTexture(*textures_[iter_num_]);
 			}
+		}
+
+		void setPosition(VerticalAligment aligment)
+		{
+			Component::setPosition(aligment);
 		}
 
 	};
