@@ -154,6 +154,11 @@ namespace gui
 
 		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override = 0;
 
+		virtual void setPosition(const sf::Vector2f position)
+		{
+			position_ = position;
+		}
+
 	public:
 
 		void addListener(IEventListener* listener)
@@ -176,12 +181,7 @@ namespace gui
 			return size_;
 		}
 
-		virtual void setPosition(const sf::Vector2f position)
-		{
-			position_ = position;
-		}
-
-		virtual void setPosition(VerticalAligment aligment)
+		void setPosition(VerticalAligment aligment)
 		{
 			sf::Vector2f position;
 			switch (aligment)
