@@ -32,12 +32,14 @@ public:
         btn_down_->addListener(this);
 
         btn_->setPosition({ 500, 500 });
-
-        
+ 
         text_.loadFromFile("res/btn_2.png");
         status_->addTexture(&text_);
         text_2.loadFromFile("res/btn_1.png");
         status_->addTexture(&text_2);
+
+        status_->setAligment(gui::HorizontalAligment::Left);
+        status_->setAligment(gui::VerticalAligment::Bottom);
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override
