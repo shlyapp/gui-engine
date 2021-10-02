@@ -23,10 +23,9 @@ namespace gui
 
 	enum class VerticalAligment
 	{
+		Top,
 		Bottom,
-		Center,
-		Left,
-		Right
+		Center
 	};
 
 	class IEventListener
@@ -152,12 +151,12 @@ namespace gui
 			}
 		}
 
-		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override = 0;
-
 		virtual void setPosition(const sf::Vector2f position)
 		{
 			position_ = position;
 		}
+
+		void draw(sf::RenderTarget& target, sf::RenderStates animation_state) const override = 0;
 
 	public:
 
@@ -181,30 +180,50 @@ namespace gui
 			return size_;
 		}
 
-		void setPosition(VerticalAligment aligment)
+		void setAligment(VerticalAligment aligment)
 		{
 			sf::Vector2f position;
+			position.x = position_.x;
+
 			switch (aligment)
 			{
-			case gui::VerticalAligment::Bottom:
+			case VerticalAligment::Top:
+				position.y = 0;
 				break;
-			case gui::VerticalAligment::Center:
-				position.x = position_.x;
+
+			case VerticalAligment::Bottom:
+				position.y = window_->getSize().y - size_.y;
+				break;
+
+			case VerticalAligment::Center:
 				position.y = window_->getSize().y / 2 - size_.y / 2;
-				setPosition(position);
-				break;
-			case gui::VerticalAligment::Left:
-				break;
-			case gui::VerticalAligment::Right:
-				break;
-			default:
 				break;
 			}
+
+			setPosition(position);
 		}
 
-		void setPosition(HorizontalAligment aligment)
+		void setAligment(HorizontalAligment aligment)
 		{
+			sf::Vector2f position;
+			position.y = position_.y;
 
+			switch (aligment)
+			{
+			case HorizontalAligment::Center:
+				position.x = window_->getSize().x / 2 - size_.x / 2;
+				break;
+
+			case HorizontalAligment::Left:
+				position.x = 0;
+				break;
+
+			case HorizontalAligment::Right:
+				position.x = window_->getSize().x - size_.x;
+				break;
+			}
+
+			setPosition(position);
 		}
 
 	};
@@ -407,8 +426,6 @@ namespace gui
 			if (visibility)
 			{
 				target.draw(btn_sprite_);
-				//std::cout << iter_num_ << std::endl;
-				//std::cout << btn_sprite_.getTexture() << std::endl;
 			}
 		}
 
@@ -426,11 +443,6 @@ namespace gui
 				std::cout << "YES\n";
 				btn_sprite_.setTexture(*textures_[iter_num_]);
 			}
-		}
-
-		void setPosition(VerticalAligment aligment)
-		{
-			Component::setPosition(aligment);
 		}
 
 	};
@@ -567,7 +579,6 @@ namespace gui
 		void setPosition(const sf::Vector2f position) override
 		{
 			Component::setPosition(position);
-
 			border_.setPosition(position_);
 			progress_bar_.setPosition(position_ + sf::Vector2f(2, 2));
 		}
