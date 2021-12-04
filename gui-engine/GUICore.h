@@ -460,7 +460,7 @@ namespace gui
 
 		sf::Vector2 <sf::Color> colors_;
 		
-		satic inline constexpr sf::Vector2f m_sfml_bounds = { 2, 12 };
+		static inline constexpr sf::Vector2f m_sfml_bounds = { 2, 12 };
 
 		void InitText(const std::string text)
 		{
